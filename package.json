@@ -1,8 +1,33 @@
 {
+  "name": "wifi-voucher-system",
+  "version": "1.0.0",
+  "description": "Production-ready Wi-Fi voucher payment and hotspot validation system for Philippine hotspot operations.",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test",
+    "lint": "node --check src/**/*.js"
+  },
+  "keywords": [
+    "wifi",
+    "voucher",
+    "paymongo",
+    "express",
+    "mysql"
+  ],
+  "author": "AI Assistant",
+  "license": "MIT",
   "dependencies": {
-    "axios": "^1.20.0",
+    "axios": "^1.7.7",
+    "cors": "^2.8.5",
     "dotenv": "^17.4.2",
-    "ejs": "^6.0.1",
-    "express": "^5.2.1"
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.7.1",
+    "express-validator": "^7.0.0",
+    "helmet": "^8.1.0",
+    "mysql2": "^3.4.0",
+    "qrcode": "^1.0.0",
+    "uuid": "^11.0.0"
   }
 }
