@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wi-Fi Access Portal</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="portal-card">
+    <!-- Header -->
+    <div class="header">
+      <div class="wifi-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+      </div>
+      <h2><%= ssidName %></h2>
+      <p class="subtitle">Select a rate plan and enter your voucher code</p>
+    </div>
+
+    <!-- Pricing Rates Section -->
+    <div class="pricing-section">
+      <div class="section-title">Available Wi-Fi Rates</div>
+      <div class="rates-grid">
+        <div class="rate-card" onclick="selectPlan('FREE15M')">
+          <div class="rate-time">15 Mins</div>
+          <div class="rate-price">FREE</div>
+          <div class="rate-code">Code: FREE15M</div>
+        </div>
+        <div class="rate-card popular" onclick="selectPlan('SPEED1H')">
+          <span class="badge">Popular</span>
+          <div class="rate-time">1 Hour</div>
+          <div class="rate-price">₱5.00</div>
+          <div class="rate-code">Code: SPEED1H</div>
+        </div>
+        <div class="rate-card" onclick="selectPlan('VIP24H')">
+          <div class="rate-time">24 Hours</div>
+          <div class="rate-price">₱20.00</div>
+          <div class="rate-code">Code: VIP24H</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alert Message Banner -->
+    <div id="statusAlert" class="alert hidden"></div>
+
+    <!-- Voucher Input Form -->
+    <form id="voucherForm">
+      <input type="hidden" name="clientMac" value="<%= clientMac %>">
+      <input type="hidden" name="apMac" value="<%= apMac %>">
+
+      <div class="form-group">
+        <label for="voucherCode">Enter Voucher Code</label>
+        <input 
+          type="text" 
+          id="voucherCode" 
+          name="voucherCode" 
+          placeholder="Select a plan above or type code" 
+          autocomplete="off" 
+          required 
+        />
+      </div>
+
+      <button type="submit" id="submitBtn" class="btn-primary">
+        <span id="btnText">Connect to Wi-Fi</span>
+        <div id="spinner" class="spinner hidden"></div>
+      </button>
+    </form>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Device MAC: <span class="mac-address"><%= clientMac || 'Detecting...' %></span></p>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('voucherForm');
+    const voucherInput = document.getElementById('voucherCode');
+    const alertBox = document.getElementById('statusAlert');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const spinner = document.getElementById('spinner');
+
+    // Auto-fill selected plan code into input box
+    function selectPlan(code) {
+      voucherInput.value = code;
+      voucherInput.focus();
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      setLoading(true);
+      alertBox.classList.add('hidden');
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch('/api/vouch/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showAlert('success', `${result.message} Time active: ${result.duration} mins.`);
+          setTimeout(() => {
+            window.location.href = '<%= redirectUrl %>';
+          }, 2000);
+        } else {
+          showAlert('error', result.message);
+          setLoading(false);
+        }
+      } catch (err) {
+        showAlert('error', 'Connection lost. Please try again.');
+        setLoading(false);
+      }
+    });
+
+    function showAlert(type, message) {
+      alertBox.className = `alert ${type}`;
+      alertBox.textContent = message;
+      alertBox.classList.remove('hidden');
+    }
+
+    function setLoading(isLoading) {
+      submitBtn.disabled = isLoading;
+      if (isLoading) {
+        btnText.classList.add('hidden');
+        spinner.classList.remove('hidden');
+      } else {
+        btnText.classList.remove('hidden');
+        spinner.classList.add('hidden');
+      }
+    }
+  </script>
+</body>
+</html>
