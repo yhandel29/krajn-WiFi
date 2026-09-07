@@ -109,4 +109,7 @@ app.post('/api/vouch/verify', async (req, res) => {
   }
 });
 
+app.get('/', (req, res) => {
+    res.redirect('/login');
+});
 app.listen(3000, () => console.log('Portal Server active on http://localhost:3000'));
