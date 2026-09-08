@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voucher Payment</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <section class="card payment-card">
+        <div class="header-block">
+          <h1>WIFI VOUCHER</h1>
+        </div>
+
+        <div class="package-preview">
+          <h2>4 HOURS INTERNET</h2>
+          <p class="price">₱20.00</p>
+        </div>
+
+        <div class="order-meta">
+          <p><strong>Order:</strong> <span id="orderReference">--</span></p>
+        </div>
+
+        <div class="qr-wrapper">
+          <div id="qrCode" class="qr-code">[ QR CODE ]</div>
+        </div>
+
+        <p class="instruction">Scan the QR code using your supported bank/e-wallet.</p>
+        <p id="paymentStatus" class="status">Waiting for payment...</p>
+        <p id="countdown" class="countdown">Expires in: --</p>
+
+        <div id="voucherSection" class="voucher-section hidden">
+          <h3>PAYMENT SUCCESSFUL</h3>
+          <p>Voucher Code:</p>
+          <div id="voucherCode" class="voucher-code">--</div>
+          <p>Duration: <span id="voucherDuration">--</span></p>
+        </div>
+      </section>
+    </main>
+
+    <script src="/js/payment.js"></script>
+  </body>
+</html>

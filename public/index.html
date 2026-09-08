@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wi-Fi Voucher</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <main class="container">
+      <section class="card">
+        <h1>Wi-Fi Voucher</h1>
+        <div class="package">
+          <h2>4 Hours Internet</h2>
+          <p class="price">₱20.00</p>
+        </div>
+        <form id="voucherForm">
+          <label>
+            Full Name
+            <input type="text" id="customerName" required />
+          </label>
+          <label>
+            Email
+            <input type="email" id="customerEmail" required />
+          </label>
+          <label>
+            Mobile Number
+            <input type="tel" id="customerMobile" required placeholder="09XXXXXXXXX" />
+          </label>
+          <button type="submit">Buy Voucher</button>
+        </form>
+        <div id="message" class="message"></div>
+      </section>
+    </main>
+
+    <script src="/js/app.js"></script>
+  </body>
+</html>

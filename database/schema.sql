@@ -1,0 +1,94 @@
+CREATE DATABASE IF NOT EXISTS wifi_voucher CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE wifi_voucher;
+
+CREATE TABLE IF NOT EXISTS users (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  full_name VARCHAR(120) NOT NULL,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  mobile VARCHAR(30) NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS voucher_plans (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  name VARCHAR(120) NOT NULL,
+  description VARCHAR(255) NULL,
+  price DECIMAL(10,2) NOT NULL,
+  duration_minutes INT NOT NULL,
+  data_limit VARCHAR(50) NULL,
+  is_active TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  INDEX idx_voucher_plans_active (is_active)
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  reference_no VARCHAR(80) NOT NULL UNIQUE,
+  voucher_plan_id BIGINT UNSIGNED NOT NULL,
+  customer_name VARCHAR(120) NOT NULL,
+  customer_email VARCHAR(150) NOT NULL,
+  customer_mobile VARCHAR(30) NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  currency VARCHAR(10) NOT NULL DEFAULT 'PHP',
+  status VARCHAR(30) NOT NULL DEFAULT 'PENDING',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  paid_at TIMESTAMP NULL,
+  completed_at TIMESTAMP NULL,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_reference_no (reference_no),
+  INDEX idx_order_status (status),
+  CONSTRAINT fk_orders_voucher_plan FOREIGN KEY (voucher_plan_id) REFERENCES voucher_plans(id)
+);
+
+CREATE TABLE IF NOT EXISTS payments (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  order_id BIGINT UNSIGNED NOT NULL,
+  provider VARCHAR(50) NOT NULL,
+  payment_intent_id VARCHAR(120) NULL,
+  payment_method_id VARCHAR(120) NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  currency VARCHAR(10) NOT NULL DEFAULT 'PHP',
+  status VARCHAR(30) NOT NULL DEFAULT 'PENDING',
+  raw_response JSON NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  INDEX idx_payments_order_id (order_id),
+  CONSTRAINT fk_payments_order FOREIGN KEY (order_id) REFERENCES orders(id)
+);
+
+CREATE TABLE IF NOT EXISTS vouchers (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  order_id BIGINT UNSIGNED NOT NULL,
+  voucher_plan_id BIGINT UNSIGNED NOT NULL,
+  voucher_code VARCHAR(80) NOT NULL UNIQUE,
+  status VARCHAR(30) NOT NULL DEFAULT 'UNUSED',
+  duration_minutes INT NOT NULL,
+  activated_at TIMESTAMP NULL,
+  expires_at TIMESTAMP NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_voucher_code (voucher_code),
+  INDEX idx_voucher_status (status),
+  CONSTRAINT fk_vouchers_order FOREIGN KEY (order_id) REFERENCES orders(id),
+  CONSTRAINT fk_vouchers_plan FOREIGN KEY (voucher_plan_id) REFERENCES voucher_plans(id)
+);
+
+CREATE TABLE IF NOT EXISTS webhook_events (
+  id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  event_id VARCHAR(120) NOT NULL UNIQUE,
+  event_type VARCHAR(80) NOT NULL,
+  payload JSON NOT NULL,
+  processed TINYINT(1) NOT NULL DEFAULT 0,
+  processed_at TIMESTAMP NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id),
+  UNIQUE KEY uq_event_id (event_id),
+  INDEX idx_webhook_processed (processed)
+);

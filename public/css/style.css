@@ -1,148 +1,136 @@
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 body {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #101827, #162135);
+  color: #e5e7eb;
+}
+
+.container {
   min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+  display: grid;
+  place-items: center;
+  padding: 24px;
 }
 
-.portal-card {
-  background: #ffffff;
-  border-radius: 20px;
-  width: 100%;
-  max-width: 400px;
-  padding: 32px 24px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.1);
+.card {
+  width: min(100%, 480px);
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+h1, h2, h3 {
+  margin-top: 0;
+}
+
+.package {
   text-align: center;
-}
-
-.header {
-  margin-bottom: 24px;
-}
-
-.wifi-icon {
-  width: 64px;
-  height: 64px;
-  background: #eff6ff;
-  color: #2563eb;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 16px auto;
-}
-
-h2 {
-  color: #0f172a;
-  font-size: 22px;
-  font-weight: 700;
-}
-
-.subtitle {
-  color: #64748b;
-  font-size: 14px;
-  margin-top: 6px;
-}
-
-.form-group {
-  text-align: left;
   margin-bottom: 20px;
+}
+
+.price {
+  font-size: 2rem;
+  color: #34d399;
+  margin: 8px 0 0;
+  font-weight: bold;
+}
+
+form {
+  display: grid;
+  gap: 14px;
 }
 
 label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: #334155;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  display: grid;
+  gap: 6px;
+  font-size: 0.95rem;
 }
 
-input[type="text"] {
+input {
   width: 100%;
-  padding: 14px 16px;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  transition: all 0.2s ease;
-  outline: none;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: #f8fafc;
 }
 
-input[type="text"]:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
-}
-
-.btn-primary {
-  width: 100%;
-  background: #2563eb;
-  color: #ffffff;
-  border: none;
-  border-radius: 12px;
-  padding: 14px;
-  font-size: 16px;
-  font-weight: 600;
+button {
+  background: #22c55e;
+  border: 0;
+  border-radius: 10px;
+  color: white;
+  padding: 12px 18px;
+  font-size: 1rem;
+  font-weight: bold;
   cursor: pointer;
+}
+
+button:hover {
+  background: #16a34a;
+}
+
+.message {
+  margin-top: 16px;
+  color: #fbbf24;
+}
+
+.payment-card {
+  text-align: center;
+}
+
+.header-block {
+  border-bottom: 1px solid #334155;
+  margin-bottom: 18px;
+  padding-bottom: 8px;
+}
+
+.qr-wrapper {
   display: flex;
   justify-content: center;
-  align-items: center;
-  transition: background 0.2s ease;
+  margin: 20px 0;
 }
 
-.btn-primary:hover {
-  background: #1d4ed8;
+.qr-code {
+  width: 220px;
+  height: 220px;
+  display: grid;
+  place-items: center;
+  border: 2px solid #64748b;
+  background: #f8fafc;
+  color: #0f172a;
+  font-weight: bold;
 }
 
-.alert {
-  padding: 12px;
-  border-radius: 10px;
-  font-size: 14px;
-  margin-bottom: 20px;
+.status {
+  color: #facc15;
+  font-weight: bold;
 }
 
-.alert.error { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
-.alert.success { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
-
-.hidden { display: none !important; }
-
-.spinner {
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: #ffffff;
-  animation: spin 0.8s linear infinite;
+.countdown {
+  color: #cbd5e1;
 }
 
-@keyframes spin {
-  to { transform: rotate(360deg); }
+.voucher-section {
+  margin-top: 20px;
+  border-top: 1px solid #334155;
+  padding-top: 18px;
 }
 
-.footer {
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid #f1f5f9;
+.voucher-code {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #6ee7b7;
+  letter-spacing: 0.08em;
+  margin: 8px 0;
 }
 
-.footer p {
-  font-size: 12px;
-  color: #94a3b8;
-}
-
-.mac-address {
-  font-family: monospace;
-  font-weight: 600;
-  color: #64748b;
+.hidden {
+  display: none;
 }
